@@ -1,7 +1,7 @@
-import {VAxios} from "./Axios.ts";
-import {ContentTypeEnum, ResultEnum} from "@/utils/httpEnum.ts";
+import {VAxios} from "./Axios";
+import {ContentTypeEnum, ResultEnum} from "@/utils/httpEnum";
 import {AxiosTransform} from "@/server/axiosTransform";
-import {RequestOptions, Result} from "@/server/types";
+import type {RequestOptions, Result} from "@/server/types";
 import {AxiosResponse} from "axios";
 // import {AxiosResponse} from "axios";
 // import {RequestOptions, Result} from "@/server/types";
@@ -240,14 +240,15 @@ const transform: AxiosTransform = {
 const Axios = new VAxios({
     baseURL: baseUrl,
     timeout: 100 * 1000,
+    withCredentials: true,
     headers: {'Content-Type': ContentTypeEnum.JSON},
-    transform,
+    // transform,
 
 }).getAxios()
 
 
-export function getax(url: string, params = {}, config = {}) {
-    return Axios.get(url, {
+export function getax<T>(url: string, params = {}, config = {}) {
+    return Axios.get<Result<T>>(url, {
         params,
         ...config
     })

@@ -5,7 +5,7 @@ import type {IRef} from "@/pages/Api/Definition/TabItem/type"
 const VanillaJSONEditor = ({value, changeValue}: {
     value: any,
     changeValue: (value: any) => void
-}, ref) => {
+}, ref:any) => {
 
     const [error, setError] = useState<any>(null);
     const [json, setJson] = useState(value);
@@ -44,4 +44,4 @@ const VanillaJSONEditor = ({value, changeValue}: {
 
     );
 }
-export default forwardRef<IRef>(VanillaJSONEditor);
+export default forwardRef<IRef,any>(VanillaJSONEditor);

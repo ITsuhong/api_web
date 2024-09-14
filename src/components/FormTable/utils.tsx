@@ -1,9 +1,12 @@
-import {Button, Empty, Popover, Select} from "antd";
-import {ForkOutlined, FunnelPlotOutlined, RightOutlined, SlidersOutlined} from "@ant-design/icons";
-import React, {useState} from "react";
+import {Button, Empty, Popover, Select, Tag} from "antd";
+import {ForkOutlined, FunnelPlotOutlined, RightOutlined, SlidersOutlined, BoxPlotOutlined} from "@ant-design/icons";
+import React, {useEffect, useState} from "react";
+import EnvironmentStore from "@/stores/environment"
+import {observer} from "mobx-react"
+import {IVariable} from "@/apis/environment"
 
-
-export const PopoverContent = ({data, valueIndex, onChangeValue}: {
+type IVariableWithLabel = IVariable & { label: string };
+const Content = ({data, valueIndex, onChangeValue}: {
     data: any;
     valueIndex: number;
     onChangeValue: (e: any) => void
@@ -14,12 +17,17 @@ export const PopoverContent = ({data, valueIndex, onChangeValue}: {
         name: string;
         value: string;
         model: string;
+        id: number;
     } | null>()
+    const [variablesList, setVariablesList] = useState<IVariableWithLabel[]>([])
     const [isPopoverOpen, setPopoverOpen] = useState(false)
+    useEffect(() => {
+        console.log(EnvironmentStore.GlobalVariableList.length, '11')
+    }, []);
     const handleInsert = () => {
-        console.log(valueIndex, variable)
         setPopoverOpen(false);
         onChangeValue({
+            id: variable?.id,
             index: valueIndex,
             name: variable?.name,
             value: variable?.value,
@@ -60,6 +68,11 @@ export const PopoverContent = ({data, valueIndex, onChangeValue}: {
             </div>
         </div>
     }
+    useEffect(() => {
+        console.log("渲染", EnvironmentStore.GlobalVariableList)
+        // let tem=
+        setVariablesList(EnvironmentStore.variableList)
+    }, [EnvironmentStore.variableList]);
     const InsertRender = ({data, index}: any) => {
 
         return <div className="w-80 h-96 flex flex-col justify-between">
@@ -74,28 +87,35 @@ export const PopoverContent = ({data, valueIndex, onChangeValue}: {
                     size="small"
                     value={variable?.name}
                     onChange={(e) => {
+                        console.log(e)
                         setVariable({
                             index: index,
-                            name: e,
-                            value: e,
+                            name: variablesList?.find((item: any) => item.id == e)?.name || '',
+                            value: variablesList?.find((item: any) => item.id == e)?.value || '',
                             model: data.value,
+                            id: Number(e),
 
                         })
                     }}
 
-                    options={[{value: '名字', label: '名字'}, {value: 'token', label: 'token'}]}
+                    options={variablesList?.map(item => ({value: item.id, label: item.name}))}
                     optionRender={(option) => (
                         <div className="flex items-center justify-between text-textSecondary">
                             <div>{option.label}</div>
-                            <div>环境变量</div>
+                            <div> {variablesList?.find((item: any) => item?.id == option?.value)?.label || ''}</div>
                         </div>
                     )}
                 />
             </div>
             {
                 variable ? <div className="flex-1">
-                    <div>{`{{${variable?.name}}}`}</div>
-                    <div className="bg-[#fbfafe] text-sm p-2 rounded-md mt-2">预览:10</div>
+
+                    <div className="mt-2">
+                        <Tag color="#55acee">
+                            {`{{${variable.name}}}`}
+                        </Tag>
+                    </div>
+                    <div className="bg-[#fbfafe] text-sm p-2 rounded-md mt-2 break-words">预览:{variable.value}</div>
 
                 </div> : <Empty description={false}/>
             }
@@ -123,3 +143,4 @@ export const PopoverContent = ({data, valueIndex, onChangeValue}: {
         <FunnelPlotOutlined/>
     </Popover>
 }
+export const PopoverContent = observer(Content)

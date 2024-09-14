@@ -20,9 +20,9 @@ export class VAxios {
     }
 
     private response() {
-
+        
         return this.axiosInstance.interceptors.response.use((response) => {
-            return response.data
+            return response
         })
     }
 

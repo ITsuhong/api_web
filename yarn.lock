@@ -584,7 +584,7 @@
   dependencies:
     "@babel/helper-plugin-utils" "^7.24.7"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.0.0-rc.0", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.18.0", "@babel/runtime@^7.18.3", "@babel/runtime@^7.20.0", "@babel/runtime@^7.20.13", "@babel/runtime@^7.20.7", "@babel/runtime@^7.21.0", "@babel/runtime@^7.22.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.6", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.4", "@babel/runtime@^7.24.7", "@babel/runtime@^7.24.8", "@babel/runtime@^7.7.7":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.0.0-rc.0", "@babel/runtime@^7.10.1", "@babel/runtime@^7.10.4", "@babel/runtime@^7.11.1", "@babel/runtime@^7.11.2", "@babel/runtime@^7.12.5", "@babel/runtime@^7.16.3", "@babel/runtime@^7.16.7", "@babel/runtime@^7.18.0", "@babel/runtime@^7.18.3", "@babel/runtime@^7.18.6", "@babel/runtime@^7.20.0", "@babel/runtime@^7.20.13", "@babel/runtime@^7.20.7", "@babel/runtime@^7.21.0", "@babel/runtime@^7.22.5", "@babel/runtime@^7.23.2", "@babel/runtime@^7.23.6", "@babel/runtime@^7.23.9", "@babel/runtime@^7.24.4", "@babel/runtime@^7.24.7", "@babel/runtime@^7.24.8", "@babel/runtime@^7.7.7":
   version "7.25.0"
   resolved "https://registry.npmmirror.com/@babel/runtime/-/runtime-7.25.0.tgz"
   integrity sha512-7dRy4DwXwtzBrPbZflqxnvfxLF8kdZXPkhymtDeFoFqE6ldzjQFgYTtYIFARcLEYDrqfBfYcZt1WqFxRoyC9Rw==
@@ -630,7 +630,7 @@
     reactcss "^1.2.3"
     tinycolor2 "^1.4.2"
 
-"@codemirror/autocomplete@^6.16.2":
+"@codemirror/autocomplete@^6.0.0", "@codemirror/autocomplete@^6.16.2":
   version "6.18.0"
   resolved "https://registry.npmmirror.com/@codemirror/autocomplete/-/autocomplete-6.18.0.tgz"
   integrity sha512-5DbOvBbY4qW5l57cjDsmmpDh3/TeK1vXfTHa+BUMrRzdWdcxKZ4U4V7vQaTtOpApNU4kLS4FQ6cINtLg245LXA==
@@ -640,7 +640,7 @@
     "@codemirror/view" "^6.17.0"
     "@lezer/common" "^1.0.0"
 
-"@codemirror/commands@^6.6.0":
+"@codemirror/commands@^6.0.0", "@codemirror/commands@^6.1.0", "@codemirror/commands@^6.6.0":
   version "6.6.0"
   resolved "https://registry.npmmirror.com/@codemirror/commands/-/commands-6.6.0.tgz"
   integrity sha512-qnY+b7j1UNcTS31Eenuc/5YJB6gQOzkUoNmJQc0rznwqSRpeaWWpjkWy2C/MPTcePpsKJEM26hXrOXl1+nceXg==
@@ -650,6 +650,19 @@
     "@codemirror/view" "^6.27.0"
     "@lezer/common" "^1.1.0"
 
+"@codemirror/lang-javascript@^6.2.2":
+  version "6.2.2"
+  resolved "https://registry.npmmirror.com/@codemirror/lang-javascript/-/lang-javascript-6.2.2.tgz"
+  integrity sha512-VGQfY+FCc285AhWuwjYxQyUQcYurWlxdKYT4bqwr3Twnd5wP5WSeu52t4tvvuWmljT4EmgEgZCqSieokhtY8hg==
+  dependencies:
+    "@codemirror/autocomplete" "^6.0.0"
+    "@codemirror/language" "^6.6.0"
+    "@codemirror/lint" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.17.0"
+    "@lezer/common" "^1.0.0"
+    "@lezer/javascript" "^1.0.0"
+
 "@codemirror/lang-json@^6.0.1":
   version "6.0.1"
   resolved "https://registry.npmmirror.com/@codemirror/lang-json/-/lang-json-6.0.1.tgz"
@@ -658,7 +671,7 @@
     "@codemirror/language" "^6.0.0"
     "@lezer/json" "^1.0.0"
 
-"@codemirror/language@^6.0.0", "@codemirror/language@^6.10.2", "@codemirror/language@^6.9.0":
+"@codemirror/language@^6.0.0", "@codemirror/language@^6.10.2", "@codemirror/language@^6.6.0", "@codemirror/language@^6.9.0":
   version "6.10.2"
   resolved "https://registry.npmmirror.com/@codemirror/language/-/language-6.10.2.tgz"
   integrity sha512-kgbTYTo0Au6dCSc/TFy7fK3fpJmgHDv1sG1KNQKJXVi+xBTEeBPY/M30YXiU6mMXeH+YIDLsbrT4ZwNRdtF+SA==
@@ -670,7 +683,7 @@
     "@lezer/lr" "^1.0.0"
     style-mod "^4.0.0"
 
-"@codemirror/lint@^6.8.0":
+"@codemirror/lint@^6.0.0", "@codemirror/lint@^6.8.0":
   version "6.8.1"
   resolved "https://registry.npmmirror.com/@codemirror/lint/-/lint-6.8.1.tgz"
   integrity sha512-IZ0Y7S4/bpaunwggW2jYqwLuHj0QtESf5xcROewY6+lDNwZ/NzvR4t+vpYgg9m7V8UXLPYqG+lu3DF470E5Oxg==
@@ -679,7 +692,7 @@
     "@codemirror/view" "^6.0.0"
     crelt "^1.0.5"
 
-"@codemirror/search@^6.5.6":
+"@codemirror/search@^6.0.0", "@codemirror/search@^6.5.6":
   version "6.5.6"
   resolved "https://registry.npmmirror.com/@codemirror/search/-/search-6.5.6.tgz"
   integrity sha512-rpMgcsh7o0GuCDUXKPvww+muLA1pDJaFrpq/CCHtpQJYz8xopu4D1hPcKRoDD0YlF8gZaqTNIRa4VRBWyhyy7Q==
@@ -688,12 +701,22 @@
     "@codemirror/view" "^6.0.0"
     crelt "^1.0.5"
 
-"@codemirror/state@^6.0.0", "@codemirror/state@^6.2.1", "@codemirror/state@^6.4.0", "@codemirror/state@^6.4.1":
+"@codemirror/state@^6.0.0", "@codemirror/state@^6.1.1", "@codemirror/state@^6.2.1", "@codemirror/state@^6.4.0", "@codemirror/state@^6.4.1":
   version "6.4.1"
   resolved "https://registry.npmmirror.com/@codemirror/state/-/state-6.4.1.tgz"
   integrity sha512-QkEyUiLhsJoZkbumGZlswmAhA7CBU02Wrz7zvH4SrcifbsqwlXShVXg65f3v/ts57W3dqyamEriMhij1Z3Zz4A==
 
-"@codemirror/view@^6.0.0", "@codemirror/view@^6.17.0", "@codemirror/view@^6.17.1", "@codemirror/view@^6.23.0", "@codemirror/view@^6.27.0":
+"@codemirror/theme-one-dark@^6.0.0":
+  version "6.1.2"
+  resolved "https://registry.npmmirror.com/@codemirror/theme-one-dark/-/theme-one-dark-6.1.2.tgz"
+  integrity sha512-F+sH0X16j/qFLMAfbciKTxVOwkdAS336b7AXTKOZhy8BR3eH/RelsnLgLFINrpST63mmN2OuwUt0W2ndUgYwUA==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+    "@lezer/highlight" "^1.0.0"
+
+"@codemirror/view@^6.0.0", "@codemirror/view@^6.17.0", "@codemirror/view@^6.17.1", "@codemirror/view@^6.23.0", "@codemirror/view@^6.27.0", "@codemirror/view@>=6.0.0":
   version "6.32.0"
   resolved "https://registry.npmmirror.com/@codemirror/view/-/view-6.32.0.tgz"
   integrity sha512-AgVNvED2QTsZp5e3syoHLsrWtwJFYWdx1Vr/m3f4h1ATQz0ax60CfXF3Htdmk69k2MlYZw8gXesnQdHtzyVmAw==
@@ -885,12 +908,21 @@
   resolved "https://registry.npmmirror.com/@lezer/common/-/common-1.2.1.tgz"
   integrity sha512-yemX0ZD2xS/73llMZIK6KplkjIjf2EvAHcinDi/TfJ9hS25G0388+ClHt6/3but0oOxinTcQHJLDXh6w1crzFQ==
 
-"@lezer/highlight@^1.0.0", "@lezer/highlight@^1.2.0":
+"@lezer/highlight@^1.0.0", "@lezer/highlight@^1.1.3", "@lezer/highlight@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmmirror.com/@lezer/highlight/-/highlight-1.2.0.tgz"
   integrity sha512-WrS5Mw51sGrpqjlh3d4/fOwpEV2Hd3YOkp9DBt4k8XZQcoTHZFB7sx030A6OcahF4J1nDQAa3jXlTVVYH50IFA==
   dependencies:
     "@lezer/common" "^1.0.0"
+
+"@lezer/javascript@^1.0.0":
+  version "1.4.17"
+  resolved "https://registry.npmmirror.com/@lezer/javascript/-/javascript-1.4.17.tgz"
+  integrity sha512-bYW4ctpyGK+JMumDApeUzuIezX01H76R1foD6LcRX224FWfyYit/HYxiPGDjXXe/wQWASjCvVGoukTH68+0HIA==
+  dependencies:
+    "@lezer/common" "^1.2.0"
+    "@lezer/highlight" "^1.1.3"
+    "@lezer/lr" "^1.3.0"
 
 "@lezer/json@^1.0.0":
   version "1.0.2"
@@ -901,7 +933,7 @@
     "@lezer/highlight" "^1.0.0"
     "@lezer/lr" "^1.0.0"
 
-"@lezer/lr@^1.0.0":
+"@lezer/lr@^1.0.0", "@lezer/lr@^1.3.0":
   version "1.4.2"
   resolved "https://registry.npmmirror.com/@lezer/lr/-/lr-1.4.2.tgz"
   integrity sha512-pu0K1jCIdnQ12aWNaAVU5bzi7Bd1w54J3ECgANPmYLtQKP0HBj2cE/5coBD66MT10xbtIuUr7tg0Shbsvk0mDA==
@@ -1362,6 +1394,47 @@
     "@typescript-eslint/types" "8.0.1"
     eslint-visitor-keys "^3.4.3"
 
+"@uiw/codemirror-extensions-basic-setup@4.23.2":
+  version "4.23.2"
+  resolved "https://registry.npmmirror.com/@uiw/codemirror-extensions-basic-setup/-/codemirror-extensions-basic-setup-4.23.2.tgz"
+  integrity sha512-eacivkj7wzskl2HBYs4rfN0CbYlsSQh5ADtOYWTpc8Txm4ONw8RTi4/rxF6Ks2vdaovizewU5QaHximbxoNTrw==
+  dependencies:
+    "@codemirror/autocomplete" "^6.0.0"
+    "@codemirror/commands" "^6.0.0"
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/lint" "^6.0.0"
+    "@codemirror/search" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+
+"@uiw/codemirror-theme-vscode@^4.23.2":
+  version "4.23.2"
+  resolved "https://registry.npmmirror.com/@uiw/codemirror-theme-vscode/-/codemirror-theme-vscode-4.23.2.tgz"
+  integrity sha512-SpXlCOCtuu8zTiTO6Cs8Oa5/czItZ59t5MfocJmjOFVN3C22VIR0oXqi375fTl+YS9Mw2+TaOSuIzuzkXH1OEQ==
+  dependencies:
+    "@uiw/codemirror-themes" "4.23.2"
+
+"@uiw/codemirror-themes@4.23.2":
+  version "4.23.2"
+  resolved "https://registry.npmmirror.com/@uiw/codemirror-themes/-/codemirror-themes-4.23.2.tgz"
+  integrity sha512-g8x+oPqgbzxXSkHhRf7e1AM1mI9/Nl3URReS89pHitRKv8MZNrE+ey+HE8ycfNXRUatrb6zTSRV3M75uoZwNYw==
+  dependencies:
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
+
+"@uiw/react-codemirror@^4.23.2":
+  version "4.23.2"
+  resolved "https://registry.npmmirror.com/@uiw/react-codemirror/-/react-codemirror-4.23.2.tgz"
+  integrity sha512-MmFL6P5V1Mr81JLkJyWNedfxENKdRhsvyU7Izji9wp337m8dqRAz7rCF5XWarGKx+iQ7q2H5ryl07nLqKLSvtQ==
+  dependencies:
+    "@babel/runtime" "^7.18.6"
+    "@codemirror/commands" "^6.1.0"
+    "@codemirror/state" "^6.1.1"
+    "@codemirror/theme-one-dark" "^6.0.0"
+    "@uiw/codemirror-extensions-basic-setup" "4.23.2"
+    codemirror "^6.0.0"
+
 "@umijs/route-utils@^4.0.0":
   version "4.0.1"
   resolved "https://registry.npmmirror.com/@umijs/route-utils/-/route-utils-4.0.1.tgz"
@@ -1756,6 +1829,19 @@ codemirror-wrapped-line-indent@^1.0.8:
   version "1.0.8"
   resolved "https://registry.npmmirror.com/codemirror-wrapped-line-indent/-/codemirror-wrapped-line-indent-1.0.8.tgz"
   integrity sha512-5UwuHCz4oAZuvot1DbfFxSxJacTESdNGa/KpJD7HfpVpDAJdgB1vV9OG4b4pkJqPWuOfIpFLTQEKS85kTpV+XA==
+
+codemirror@^6.0.0:
+  version "6.0.1"
+  resolved "https://registry.npmmirror.com/codemirror/-/codemirror-6.0.1.tgz"
+  integrity sha512-J8j+nZ+CdWmIeFIGXEFbFPtpiYacFMDR8GlHK3IyHQJMCaVRfGx9NT+Hxivv1ckLWPvNdZqndbr/7lVhrf/Svg==
+  dependencies:
+    "@codemirror/autocomplete" "^6.0.0"
+    "@codemirror/commands" "^6.0.0"
+    "@codemirror/language" "^6.0.0"
+    "@codemirror/lint" "^6.0.0"
+    "@codemirror/search" "^6.0.0"
+    "@codemirror/state" "^6.0.0"
+    "@codemirror/view" "^6.0.0"
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -2979,6 +3065,25 @@ minimist@^1.2.6, minimist@^1.2.8:
   resolved "https://registry.npmmirror.com/minipass/-/minipass-7.1.2.tgz"
   integrity sha512-qOOzS1cBTWYF4BH8fVePDBOO9iptMnGUEZwNc/cMWnTV2nVLZ7VoNWEPHkYczZA0pdoA7dl6e7FL659nX9S2aw==
 
+mobx-react-lite@^4.0.7:
+  version "4.0.7"
+  resolved "https://registry.npmmirror.com/mobx-react-lite/-/mobx-react-lite-4.0.7.tgz"
+  integrity sha512-RjwdseshK9Mg8On5tyJZHtGD+J78ZnCnRaxeQDSiciKVQDUbfZcXhmld0VMxAwvcTnPEHZySGGewm467Fcpreg==
+  dependencies:
+    use-sync-external-store "^1.2.0"
+
+mobx-react@^9.1.1:
+  version "9.1.1"
+  resolved "https://registry.npmmirror.com/mobx-react/-/mobx-react-9.1.1.tgz"
+  integrity sha512-gVV7AdSrAAxqXOJ2bAbGa5TkPqvITSzaPiiEkzpW4rRsMhSec7C2NBCJYILADHKp2tzOAIETGRsIY0UaCV5aEw==
+  dependencies:
+    mobx-react-lite "^4.0.7"
+
+mobx@^6.13.1, mobx@^6.9.0:
+  version "6.13.1"
+  resolved "https://registry.npmmirror.com/mobx/-/mobx-6.13.1.tgz"
+  integrity sha512-ekLRxgjWJr8hVxj9ZKuClPwM/iHckx3euIJ3Np7zLVNtqJvfbbq7l370W/98C8EabdQ1pB5Jd3BbDWxJPNnaOg==
+
 "monaco-editor@>= 0.21.0 < 1", "monaco-editor@>= 0.25.0 < 1":
   version "0.50.0"
   resolved "https://registry.npmmirror.com/monaco-editor/-/monaco-editor-0.50.0.tgz"
@@ -3780,7 +3885,7 @@ react-textarea-autosize@^8.3.2:
     use-composed-ref "^1.3.0"
     use-latest "^1.2.1"
 
-react@*, "react@^15.0.2 || ^16.0.0 || ^17.0.0", "react@^16.11.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^17.0.0 || ^16.3.0 || ^15.5.4", react@^18.3.1, react@>=16.0.0, react@>=16.11.0, react@>=16.12.0, react@>=16.2.0, react@>=16.8, react@>=16.8.0, react@>=16.9.0, react@>=17.0.0:
+react@*, "react@^15.0.2 || ^16.0.0 || ^17.0.0", "react@^16.11.0 || ^17.0.0 || ^18.0.0", "react@^16.8.0 || ^17 || ^18", "react@^16.8.0 || ^17.0.0 || ^18.0.0", "react@^17.0.0 || ^16.3.0 || ^15.5.4", react@^18.3.1, react@>=16.0.0, react@>=16.11.0, react@>=16.12.0, react@>=16.2.0, react@>=16.8, react@>=16.8.0, react@>=16.9.0, react@>=17.0.0:
   version "18.3.1"
   resolved "https://registry.npmmirror.com/react/-/react-18.3.1.tgz"
   integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==

@@ -1,4 +1,4 @@
-import {Button, Input, Modal, Popover, Select, Empty} from "antd";
+import {Button, Input, Modal, Popover, Select, Empty, Tag, Tooltip} from "antd";
 import {
     ExpandAltOutlined,
     MinusCircleOutlined,
@@ -7,12 +7,13 @@ import React, {useState, useEffect, memo, useCallback} from "react";
 import classnames from 'classnames'
 import {getUUid} from "@/utils/util"
 import {PopoverContent} from "./utils"
+import {observer} from "mobx-react"
 
 const {TextArea} = Input;
 import type {IPropsType, IStateType, IRefType} from "./type"
 
 
-const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) => {
+const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
 
     const [tableValue, setTableValue] = useState<IRefType[]>()
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -20,46 +21,73 @@ const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) 
     const [indexValue, setIndexValue] = useState(0);
     const [typeValue, setTypeValue] = useState("")
 
-
-    const onChange = (e: any, index: number, type) => {
-        const temTableValue = [...tableValue];
-        temTableValue[index][type].value = e.target.value;
-
-        setTableValue(temTableValue)
-        if (onChangeValue) {
-            onChangeValue(temTableValue);
-        }
-    };
-    const handleOptionAdd = () => {
-        setTableValue([...tableValue, {
-            id: getUUid(),
-            name: {
-                name: "",
-                type: "text",
-                value: ""
-            },
-            value: {
-                name: "",
-                type: "text",
-                value: ""
-            },
-            desc: {
+    useEffect(() => {
+        const tem: any = {id: getUUid()};
+        columns.forEach(item => {
+            tem[item.value] = {
                 name: "",
                 type: "text",
                 value: ""
             }
-        }])
+        })
+        setTableValue([tem])
+    }, [])
+    useEffect(() => {
+        if (dataSource) {
+
+            setTableValue(dataSource.map((item: any) => {
+                return {
+                    ...item,
+                    id: getUUid()
+                }
+            }))
+            onChangeValue?.(dataSource)
+        }
+    }, [dataSource])
+
+    const onChange = (e: any, index: number, type: string) => {
+
+        if (tableValue) {
+            const temTableValue: any = [...tableValue];
+            temTableValue[index][type].value = e.target.value;
+            setTableValue(temTableValue)
+
+            if (onChangeValue) {
+                onChangeValue(temTableValue);
+            }
+        }
+
+
+    };
+    const handleOptionAdd = () => {
+        const tem: any = {id: getUUid()};
+        columns.forEach(item => {
+            tem[item.value] = {
+                name: "",
+                type: "text",
+                value: ""
+            }
+        })
+        setTableValue([tem])
+        if (tableValue) {
+            setTableValue([...tableValue, tem])
+        }
+
     }
-    const handleOptionDelete = (index) => {
+    const handleOptionDelete = (index: number) => {
         if (tableValue?.length) {
             const temTableValue = tableValue
             temTableValue?.splice(index, 1)
+            console.log('temTableValue', temTableValue)
             setTableValue([...temTableValue])
+            if (onChangeValue) {
+                onChangeValue(temTableValue);
+            }
         }
     }
     const handleOk = () => {
         setIsModalOpen(false)
-        const temTableValue = tableValue
+        const temTableValue: any = tableValue
         console.log(temTableValue?.[indexValue]?.[typeValue])
         if (temTableValue) {
             temTableValue[indexValue][typeValue]["value"] = textAreaValue;
@@ -74,35 +102,31 @@ const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) 
 
         setIndexValue(index)
         setTypeValue(type)
-        setTextAreaValue(tableValue?.[index][type].value)
+        const typedKey = type as keyof IRefType;
+        setTextAreaValue(tableValue?.[index]?.[typedKey]?.value as string);
         setIsModalOpen(true);
     }
     const handleOptionPopoverValue = (record: any) => {
-        console.log(record)
+
+        const tem: any = tableValue
+        tem[record.index][record.model].value = record.value
+        tem[record.index][record.model].type = "variable"
+        tem[record.index][record.model].name = record.name
+
+        setTableValue([...tem])
+        onChangeValue?.([...tem])
+
     }
-    useEffect(() => {
-        const tem: any = {id: getUUid()};
-        columns.forEach(item => {
-            tem[item.value] = {
-                name: "",
-                type: "text",
-                value: ""
-            }
-        })
-        setTableValue([tem])
-    }, [])
-    useEffect(() => {
-        if (dataSource) {
-            console.log(dataSource, "数据")
-            setTableValue(dataSource.map(item => {
-                return {
-                    ...item,
-                    id: getUUid()
-                }
-            }))
-            onChangeValue?.(dataSource)
-        }
-    }, [dataSource])
+    const handleOptionTagClose = (record: any, index: number) => {
+        console.log("改变", record, index)
+        const tem: any = tableValue
+        tem[index][record.value].value = ''
+        tem[index][record.value].type = "text"
+        tem[index][record.value].name = ''
+        console.log(tem)
+        setTableValue([...tem])
+    }
+
 
     return (
         <div className="overflow-auto">
@@ -122,6 +146,7 @@ const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) 
                 </div>
                 {
                     tableValue && tableValue?.map((item, valueIndex) => {
+
                         return (
                             <div className="flex items-center border-b-[1px]" key={item.id}>
                                 {
@@ -131,35 +156,42 @@ const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) 
                                             "flex-1 border-r-0 flex items-center": index == columns.length - 1,
                                         })}
                                                     style={{width: item.width || 200 + 'px'}} key={item.name}>
-                                            <Input value={tableValue[valueIndex][item.value]['value']}
-                                                   placeholder="Basic usage"
-                                                   onChange={(e) => {
-                                                       onChange(e, valueIndex, item.value)
-                                                   }} suffix={
-                                                <>
-                                                    {item.modal &&
-                                                        <div onClick={() => handleOptionOpen(valueIndex, item.value)}
-                                                             className=" px-1 hover:bg-[#f6f6f7] cursor-pointer">
-                                                            <ExpandAltOutlined/>
-                                                        </div>
-                                                    }
-                                                    <PopoverContent onChangeValue={handleOptionPopoverValue} data={item}
-                                                                    valueIndex={valueIndex}/>
-                                                    {/*<Popover*/}
-                                                    {/*    onOpenChange={(e) => {*/}
-                                                    {/*        setIsInsert(0)*/}
-                                                    {/*        setVariable(null)*/}
-                                                    {/*    }}*/}
-                                                    {/*    placement="right" title="插入动态值" trigger="click"*/}
-                                                    {/*    content={isInsert ?*/}
-                                                    {/*        <InsertRender data={item} index={valueIndex}/> :*/}
-                                                    {/*        <ChoiceRender/>}*/}
-                                                    {/*    className=" px-1 hover:bg-[#f6f6f7] cursor-pointer">*/}
-                                                    {/*    <FunnelPlotOutlined/>*/}
-                                                    {/*</Popover>*/}
-                                                </>
+                                            {
+                                                tableValue[valueIndex][item.value]['type'] == 'text' &&
+                                                <Input value={tableValue[valueIndex][item.value]['value']}
+                                                       placeholder="Basic usage"
+                                                       onChange={(e) => {
+                                                           onChange(e, valueIndex, item.value)
+                                                       }} suffix={
+                                                    <>
+                                                        {item.modal &&
+                                                            <div onClick={() => handleOptionOpen(valueIndex, item.value)}
+                                                                 className=" px-1 hover:bg-[#f6f6f7] cursor-pointer">
+                                                                <ExpandAltOutlined/>
+                                                            </div>
+                                                        }
+                                                        {
+                                                            item.variable &&
+                                                            <PopoverContent onChangeValue={handleOptionPopoverValue}
+                                                                            data={item}
+                                                                            valueIndex={valueIndex}/>
+                                                        }
 
-                                            }/>
+                                                    </>
+
+                                                }/>
+                                            }
+                                            {
+                                                tableValue[valueIndex][item.value]['type'] == 'variable' &&
+                                                <Tooltip title={tableValue[valueIndex][item.value]['value']}>
+                                                    <Tag color="#55acee" closeIcon onClose={() => {
+                                                        handleOptionTagClose(item, valueIndex)
+                                                    }}>
+                                                        {`{{${tableValue[valueIndex][item.value]['name']}}}`}
+                                                    </Tag>
+                                                </Tooltip>
+
+                                            }
                                             {
                                                 index == columns.length - 1 &&
                                                 <div onClick={() => handleOptionDelete(valueIndex)}
@@ -189,6 +221,7 @@ const FormTable = React.memo(({columns, onChangeValue, dataSource}: IPropsType) 
         </div>
     )
 
-})
+}
 
-export default FormTable
+const ObserverFormTable = observer(FormTable)
+export default ObserverFormTable

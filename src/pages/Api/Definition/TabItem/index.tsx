@@ -11,10 +11,9 @@ import ResponseHead from "@/pages/Api/Definition/TabItem/ResponseHead";
 import ActualRequest from "@/pages/Api/Definition/TabItem/ActualRequest";
 import {SmallDashOutlined} from "@ant-design/icons"
 import FormTable from "@/components/FormTable"
-import DataTable from "@/pages/Api/Definition/TabItem/DataTable";
-import TestItem from "@/pages/Api/Definition/TestItem";
-import {HeaderTable} from "./utils"
+import EnvironmentStore from "@/stores/environment"
 
+const {Option} = Select;
 const headerColumns = [
     {
         name: "参数名",
@@ -24,8 +23,9 @@ const headerColumns = [
     {
         name: "参数值",
         value: "value",
-        width:400,
-        modal: true
+        width: 400,
+        modal: true,
+        variable: true,
 
     }, {
         name: "说明",
@@ -35,13 +35,14 @@ const headerColumns = [
     }
 ]
 const Tabitem: React.FC = () => {
-    const [jsonData, setJsonData] = useState(null)
+    const [jsonData, setJsonData] = useState('')
     const paramsRef = useRef<IRef>()
     const requestHeadRef = useRef<IRef>()
-    const bodyRef = useRef<IRef>()
+    const bodyRef = useRef<IRef>(null)
     const isMoving = useRef(false)
     const [startY, setStartY] = useState(0); // 用于记录鼠标初始Y位置
     const lastY = useRef(0);
+    const [path, setPath] = useState("")
     const [requestDate, setRequestDate] = useState<RequestDataType>({
         requestType: 0,
         path: '',
@@ -62,7 +63,7 @@ const Tabitem: React.FC = () => {
     //     console.log("改变")
     //     setRequestHeaderValues(record)
     // },[])
-    const handelOptionHeadValue = (record) => {
+    const handelOptionHeadValue = (record: any) => {
         console.log("record", record)
         setRequestHeaderValues(record)
     }
@@ -79,13 +80,14 @@ const Tabitem: React.FC = () => {
             key: '1',
             label: '请求头',
             children: <FormTable columns={headerColumns} onChangeValue={(e) => {
-                console.log(e, '11')
-                const tem = e.map(item => ({
+                console.log("过来了", e)
+                const tem = e.map((item: any) => ({
                     id: item.id,
                     name: item.name.value,
                     value: item.value.value,
                     desc: item.desc.value
                 }))
+                console.log(tem, 'tem')
                 setRequestHeaderValues(tem)
 
             }}/>
@@ -139,11 +141,16 @@ const Tabitem: React.FC = () => {
         </Select>
     );
     const handleOptionChangeInput = (e: any) => {
+        setPath(e.target.value.trim())
         setRequestDate({...requestDate, path: e.target.value.trim()})
     }
 
     const handleOptionSend = () => {
         console.log(requestHeaderValues, "info")
+        let url = ''
+        // console.log(EnvironmentStore.selectEnvironment.serviceUrlDataList[0].url)
+
+
         setResponseActive("1")
         setShowSpinning(true)
         // setTimeout()
@@ -155,8 +162,13 @@ const Tabitem: React.FC = () => {
             temData.bodyData = bodyRef.current?.getInfo()
             // temData.headers = JSON.stringify(requestHeaderValues)
 
+            if (EnvironmentStore.selectEnvironment) {
+                url = EnvironmentStore.selectEnvironment.serviceUrlDataList[0].url
+                temData.path = url + path
+                console.log(url + requestDate.path)
+            }
             if (requestHeaderValues?.length) {
-                console.log("进来")
+                console.log(requestHeaderValues, '进来')
                 temData.headers = JSON.stringify(requestHeaderValues)
 
             } else {
@@ -178,24 +190,31 @@ const Tabitem: React.FC = () => {
             setRequestDate(temData)
 
             getRequest(requestDate).then(res => {
-                setJsonData(res.data.body)
-                setResponseData(res.data)
-                setResponseSize(res.data.headers?.["Content-Length"]?.[0] || 0)
-                const temHeadData = [];
-                for (const key in res.data.headers) {
-                    console.log(key)
-                    temHeadData.push({
-                        key,
-                        value: res.data.headers[key][0]
-                    })
+                console.log(res, "haha")
+                if (res.data) {
+                    setJsonData(res.data.body)
+                    setResponseData(res.data)
+                    if (Array.isArray(res.data.headers?.["Content-Length"]) && res.data.headers?.["Content-Length"].length > 0) {
+                        setResponseSize(res.data.headers?.["Content-Length"]?.[0] || 0)
+                    }
+
+                    const temHeadData: any = [];
+                    for (const key in res.data.headers) {
+                        console.log(key)
+                        temHeadData.push({
+                            key,
+                            value: res.data.headers[key]?.[0]
+                        })
+                    }
+                    setResponseHeadData(temHeadData)
+                    const code = res.data?.statusCodeValue;
+                    if (code > 0 && code < 400) {
+                        setStatus("success")
+                    } else {
+                        setStatus("error")
+                    }
                 }
-                setResponseHeadData(temHeadData)
-                const code = res.data?.statusCodeValue;
-                if (code > 0 && code < 400) {
-                    setStatus("success")
-                } else {
-                    setStatus("error")
-                }
+
             });
         } finally {
             setTimeout(() => {
@@ -344,13 +363,13 @@ const Tabitem: React.FC = () => {
                                         </div>
                                         <div className="flex-1 overflow-auto h-0">
                                             {
-                                                responseActive == 1 && <ViewJson data={jsonData}/>
+                                                responseActive == '1' && <ViewJson data={jsonData}/>
                                             }
                                             {
-                                                responseActive == 2 && <ResponseHead data={responseHeadData}/>
+                                                responseActive == '2' && <ResponseHead data={responseHeadData}/>
                                             }
                                             {
-                                                responseActive == 3 && <ActualRequest data={responseData}/>
+                                                responseActive == '3' && <ActualRequest data={responseData}/>
                                             }
                                         </div>
                                     </div>

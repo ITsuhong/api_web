@@ -1,5 +1,5 @@
 import {Input, Button, Modal} from 'antd';
-import {useState, forwardRef, useImperativeHandle} from "react"
+import {useState, forwardRef, useImperativeHandle, Ref} from "react"
 import {
     MinusCircleOutlined,
     ExpandAltOutlined
@@ -10,11 +10,11 @@ import type {IRef} from "./type"
 const {TextArea} = Input;
 
 interface ResultProps {
-    type: string,
-    height: number
+    type?: string,
+    height?: number
 }
 
-const DataTable = (props: ResultProps, ref) => {
+const DataTable = (props: ResultProps, ref: Ref<unknown> | undefined) => {
     const [tableValue, setTableValue] = useState<RequestTableType[]>([{
         id: 1,
         name: "",
@@ -28,10 +28,10 @@ const DataTable = (props: ResultProps, ref) => {
     useImperativeHandle(ref, () => ({
         getInfo: getInfo
     }))
-    const onChange = (e: any, index: number, type) => {
+    const onChange = (e: any, index: number, type:keyof RequestTableType) => {
 
-        const temTableValue = [...tableValue]
-        temTableValue[index][type] = e.target.value
+        const temTableValue:any = [...tableValue]
+        temTableValue[index][type] = e.target.value;
         setTableValue(temTableValue)
         console.log(tableValue)
     }
@@ -44,7 +44,7 @@ const DataTable = (props: ResultProps, ref) => {
             desc: ""
         }])
     }
-    const handleOptionDelete = (index) => {
+    const handleOptionDelete = (index: number) => {
         const temTableValue = tableValue
         temTableValue.splice(index, 1)
         setTableValue([...temTableValue])
@@ -133,4 +133,5 @@ const DataTable = (props: ResultProps, ref) => {
 
     )
 }
-export default forwardRef<IRef>(DataTable)
+
+export default forwardRef<IRef, ResultProps>(DataTable)

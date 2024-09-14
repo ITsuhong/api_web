@@ -1,22 +1,22 @@
 import {Radio} from 'antd';
 import {ContentType} from "@/utils/RequestMethod"
 import VanillaJSONEditor from "@/components/VanillaJSONEditor";
-import {useState, forwardRef, useImperativeHandle, useRef} from "react"
+import {useState, forwardRef, useImperativeHandle, useRef, Ref} from "react"
 import DataTable from "@/pages/Api/Definition/TabItem/DataTable";
 import type {IRef} from "./type"
 
-const Body = (props, ref) => {
+const Body = (props: any, ref: any) => {
     const [radioValue, setRadioValue] = useState('none')
-    const bodyJsonRef = useRef<IRef>()
+    const bodyJsonRef = useRef<IRef>(null)
     const [jsonValue, setJsonValue] = useState<any>();
-    const onChange = (e) => {
+    const onChange = (e: any) => {
 
         setRadioValue(e.target.value)
     }
     const changeJson = (record: any) => {
-        if(record){
+        if (record) {
             setJsonValue(JSON.stringify(record))
-        }else{
+        } else {
             setJsonValue(null)
         }
 

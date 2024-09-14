@@ -5,7 +5,8 @@ interface ResultProps {
     size?: number
 }
 
-const Icon: React.FC = ({name, size}: ResultProps
+
+const Icon: React.FC<ResultProps> = ({name, size}: ResultProps
 ) => {
     const fullName = "iconfont " + name
     console.log(fullName)

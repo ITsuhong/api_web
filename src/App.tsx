@@ -1,8 +1,9 @@
 import Basiclayout from "@/layout/Basiclayout";
 import {ConfigProvider} from "antd";
+import EnvironmentStore from "@/stores/environment"
 
 function App() {
-
+    EnvironmentStore.setEnvList();
     return (
         <>
             <ConfigProvider
@@ -18,8 +19,8 @@ function App() {
                         },
                         Tree: {
                             directoryNodeSelectedBg: "rgb(34, 82, 231, 0.1)",
-                            directoryNodeSelectedColor:"#222",
-                            titleHeight:28
+                            directoryNodeSelectedColor: "#222",
+                            titleHeight: 28
                         }
                     }
                 }}>

@@ -7,7 +7,7 @@ const ActualRequest = ({data}: {
 }) => {
     const [headerData, setHeaderData] = useState<{ key: string, value: string }[]>()
     useEffect(() => {
-        const temData = []
+        const temData: any = []
         for (const key in data?.requestHeaders) {
             temData.push({
                 key,
@@ -21,7 +21,7 @@ const ActualRequest = ({data}: {
             <div className="text-[16px] font-semibold ">请求 URL：</div>
             <div className="flex items-center ml-2 mt-2">
                 <div className="font-bold text-[15px] mr-3"
-                     style={{color: RequestMethodColor[data?.requestData?.requestType]}}>{data.requestData?.requestType}</div>
+                     style={{color: RequestMethodColor[String(data?.requestData?.requestType) as keyof typeof RequestMethodColor] || "#20b570"}}>{data.requestData?.requestType}</div>
                 <div>{data.requestData?.path}</div>
             </div>
             <div className="mt-3">

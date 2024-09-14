@@ -3,6 +3,7 @@ export interface ITable {
     value: string;
     width?: number;
     modal?: boolean;
+    variable?: boolean;
 }
 
 export interface IPropsType {
@@ -19,5 +20,5 @@ export type IStateType = {
 
 export type IRefType = {
     id: number
-} & IStateType
+} & Record<any, IStateType>
 

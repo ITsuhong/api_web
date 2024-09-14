@@ -3,7 +3,7 @@ import {AxiosTransform} from "@/server/axiosTransform";
 
 export interface CreateAxiosOptions extends AxiosRequestConfig {
     prefixUrl?: string
-    transform?:AxiosTransform
+    transform?: AxiosTransform
     // transform?: AxiosTransform
     // requestOptions?: RequestOptions
 }
@@ -39,11 +39,10 @@ export interface RequestOptions {
     isReturnNativeResponse?: boolean
 }
 
-export interface Result<T = any> {
+export type Result<T=any>= {
     code: number
     type?: 'success' | 'error' | 'warning'
     message: string
-    result?: T
     data?: T
     page?: {
         count?: number

@@ -5,7 +5,7 @@ interface ResultProps {
     data: string
 }
 
-const ViewJson: React.FC = ({data}: ResultProps) => {
+const ViewJson: React.FC<ResultProps> = ({data}: ResultProps) => {
     console.log("重新渲染")
     const [json, setJson] = useState();
     useEffect(() => {
