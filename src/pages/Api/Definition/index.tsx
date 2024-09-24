@@ -8,12 +8,14 @@ import {Button, Select} from 'antd';
 import {MenuOutlined, PlusOutlined} from "@ant-design/icons";
 import EnvironmentModal from "./EnvironmentModal/index";
 import InterfaceItem from "./InterfaceItem";
+import InterfaceDetails from "./InterfaceDetails";
 
 import {observer} from "mobx-react"
 import EnvironmentStore from "@/stores/environment";
 import TreeDirectoryCom from "@/components/TreeDirectory";
 import {selectAllDirectory} from "@/apis/directory";
 import {selectInterface} from "@/apis/request"
+import {RequestMethod, RequestMethodColor} from "@/utils/RequestMethod";
 
 type TargetKey = React.MouseEvent | React.KeyboardEvent | string;
 
@@ -30,18 +32,23 @@ const AddLabel = () => {
         <div className="ml-1">新建...</div>
     </div>
 }
-const initialItems = [
-    {label: <TabLabel/>, children: <InterfaceItem/>, key: '1'},
-    // {label: <TabLabel/>, children: <TestItem/>, key: '1'},
-];
-const Definition: React.FC = () => {
 
-    const [activeKey, setActiveKey] = useState(initialItems[0].key);
-    const [items, setItems] = useState(initialItems);
+
+const Definition: React.FC = () => {
+    const [activeKey, setActiveKey] = useState("1");
+    const [items, setItems] = useState<any>([]);
     const newTabIndex = useRef(0);
     const [isModalVisible, setIsModalVisible] = useState(false)
     const [treeData, setTreeData] = useState<any>([])
     const [interfaceList, setInterfaceList] = useState<any>([])
+    const createReady = () => {
+        selectAllDirectory().then(res => {
+            setTreeData(res.data)
+        })
+        selectInterface().then(res => {
+            setInterfaceList(res.data)
+        })
+    }
     const handleOptionInterface = (record: any) => {
         console.log(record)
         if (record === 'quick') {
@@ -49,7 +56,6 @@ const Definition: React.FC = () => {
             const newPanes = [...items];
             newPanes.push({label: <TabLabel/>, children: <Tabitem/>, key: newActiveKey});
             setItems(newPanes);
-
             setActiveKey(newActiveKey);
         }
     }
@@ -61,19 +67,18 @@ const Definition: React.FC = () => {
         const newPanes = [...items];
         newPanes.push({label: <AddLabel/>, children: <AddPage onChange={handleOptionInterface}/>, key: newActiveKey});
         setItems(newPanes);
-
         setActiveKey(newActiveKey);
     };
 
     const remove = (targetKey: TargetKey) => {
         let newActiveKey = activeKey;
         let lastIndex = -1;
-        items.forEach((item, i) => {
+        items.forEach((item: any, i: any) => {
             if (item.key === targetKey) {
                 lastIndex = i - 1;
             }
         });
-        const newPanes = items.filter((item) => item.key !== targetKey);
+        const newPanes = items.filter((item: any) => item.key !== targetKey);
         if (newPanes.length && newActiveKey === targetKey) {
             if (lastIndex >= 0) {
                 newActiveKey = newPanes[lastIndex].key;
@@ -101,7 +106,11 @@ const Definition: React.FC = () => {
             case "interface": {
                 const newActiveKey = `interfaceItem${newTabIndex.current++}`
                 const newPanes = [...items]
-                newPanes.push({label: <TabLabel/>, children: <InterfaceItem/>, key: newActiveKey})
+                newPanes.push({
+                    label: <TabLabel/>,
+                    children: <InterfaceItem directoryId={record.id} onReady={createReady}/>,
+                    key: newActiveKey
+                })
                 setItems(newPanes);
                 setActiveKey(newActiveKey);
             }
@@ -110,11 +119,29 @@ const Definition: React.FC = () => {
                 break
         }
     }
+    const onClickNode = (record: any) => {
+        console.log(record)
+        const newActiveKey = `newTab${newTabIndex.current++}`;
+        const newPanes = [...items];
+        newPanes.push({
+            label: <div className="flex items-center">
+                <div className="font-bold" style={{color:RequestMethod.find((item:any)=>item.value==record?.restfulType)?.color}}>{RequestMethod.find((item:any)=>item.value==record?.restfulType)?.name}</div>
+                <div className="ml-1">{record?.name}</div>
+            </div>, children: <InterfaceDetails data={record}/>, key: newActiveKey
+        });
+        setItems(newPanes);
+        setActiveKey(newActiveKey);
+    }
     useEffect(() => {
-        console.log(EnvironmentStore.GlobalVariableList.length, '长度')
+
     }, [EnvironmentStore.GlobalVariableList]);
 
     useEffect(() => {
+        setItems([
+            // {label: <TabLabel/>, children: <InterfaceDetails/>, key: '1'},
+            {label: <TabLabel/>, children: <InterfaceItem onReady={createReady}/>, key: '1'},
+            // {label: <TabLabel/>, children: <TestItem/>, key: '1'},
+        ])
         selectAllDirectory().then(res => {
             setTreeData(res.data)
         })
@@ -162,7 +189,8 @@ const Definition: React.FC = () => {
                     </div>
                 </div>
                 <div className="mt-2">
-                    <TreeDirectoryCom data={treeData} interfaceList={interfaceList} onChange={onTreeChange}/>
+                    <TreeDirectoryCom onClickNode={onClickNode} data={treeData} interfaceList={interfaceList}
+                                      onChange={onTreeChange}/>
 
                 </div>
 

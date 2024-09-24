@@ -30,7 +30,7 @@ const InterfaceTree = () => {
             </div>
         </div>
         <div className="mt-2">
-            <TreeDirectoryCom data={treeData}/>
+            {/*<TreeDirectoryCom data={treeData}/>*/}
 
         </div>
 

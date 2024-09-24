@@ -36,7 +36,7 @@ export interface IInterface {
     headerId: number;
     status: number;
     restfulType: number;
-    name:string;
+    name: string;
     labels: string;
     path: string;
     des: string;
@@ -44,6 +44,8 @@ export interface IInterface {
     params: string;
     body: string;
     responseBody: string;
+    createTime?: string;
+    updateTime?: string
 }
 
 export const getRequest = async (data: RequestDataType) => {
@@ -59,4 +61,8 @@ export const createInterface = async (data: IInterface) => {
 export const selectInterface = async () => {
     const {data} = await getax<IInterface[]>('/request/select_interface')
     return data
+}
+export const detailInterface = async (data: { id: number }) => {
+    const result = await getax<IInterface>("/request/detail_interface", data)
+    return result.data
 }

@@ -1,10 +1,10 @@
-import {Button, Input, Select, Tabs, Tree} from "antd";
+import {Button, Input, message, Select, Tabs, Tree} from "antd";
 import React, {useRef, useState} from "react";
 import {RequestMethod, RequestMethodColor} from "@/utils/RequestMethod";
 import FormTable from "@/components/FormTable";
 import Body from "@/pages/Api/Definition/TabItem/Body";
-import CodeMirror from '@uiw/react-codemirror';
 import {createInterface} from "@/apis/request"
+import CodeMirror from '@uiw/react-codemirror';
 import {json} from '@codemirror/lang-json';
 import {vscodeDark} from "@uiw/codemirror-theme-vscode"
 // import './index.less'
@@ -51,7 +51,10 @@ const paramsColumns = [
 
     }
 ]
-const InterfaceItem = () => {
+const InterfaceItem = ({directoryId, onReady}: {
+    directoryId?: number,
+    onReady: () => void
+}) => {
     const [methodType, setMethodType] = useState<number>(RequestMethod[0].value)
     const [pathName, setPathName] = useState("")
     const [interfaceName, setInterfaceName] = useState("")
@@ -82,11 +85,12 @@ const InterfaceItem = () => {
         console.log(responseValue)
         console.log(bodyRef.current?.getInfo())
         console.log(methodType)
+        const hide = message.loading({content: '操作中', key: 'loading'});
         const temData = {
             pid: 0,
             projectId: 1,
             userId: 1,
-            directoryId: 5,
+            directoryId: directoryId || 0,
             serviceId: 22,
             headerId: 1,
             status: 1,
@@ -94,14 +98,16 @@ const InterfaceItem = () => {
             labels: "这是标签",
             path: pathName,
             des: explain,
-            name:interfaceName,
+            name: interfaceName,
             requestHeader: requestHeaderValues ? JSON.stringify(requestHeaderValues) : "",
             params: paramsValues ? JSON.stringify(paramsValues) : "",
             body: bodyRef.current?.getInfo() ? JSON.stringify(bodyRef.current?.getInfo()) : "",
             responseBody: responseValue
         }
-        createInterface(temData)
-
+        await createInterface(temData)
+        hide();
+        message.success("新建成功")
+        onReady();
     }
     const selectBefore = (
         <Select defaultValue={methodType} className="w-24" onChange={handleMethodChange}>

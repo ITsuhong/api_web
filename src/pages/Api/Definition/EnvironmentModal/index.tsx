@@ -276,8 +276,6 @@ const EnvironmentModal = ({isModalOpen, onChange}: ModalProps) => {
         if (isModalOpen) {
             setEnvData()
             setSelectedEnvironment(EnvironmentStore.getList?.[0].id || 0)
-
-
             // selectGlobalVariable().then(res => {
             //     setGlobalVariables(res.data)
             // })

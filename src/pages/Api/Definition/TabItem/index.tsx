@@ -4,7 +4,7 @@ import {RequestMethod} from "@/utils/RequestMethod"
 
 import Body from "@/pages/Api/Definition/TabItem/Body";
 import ViewJson from "@/components/ViewJson";
-import {getRequest} from "@/apis/request";
+import {getRequest, IInterface} from "@/apis/request";
 import type {RequestDataType, RequestResult} from "@/apis/request"
 import type {IRef} from "./type"
 import ResponseHead from "@/pages/Api/Definition/TabItem/ResponseHead";
@@ -18,7 +18,6 @@ const headerColumns = [
     {
         name: "参数名",
         value: "name",
-
     },
     {
         name: "参数值",
@@ -34,7 +33,7 @@ const headerColumns = [
 
     }
 ]
-const Tabitem: React.FC = () => {
+const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     const [jsonData, setJsonData] = useState('')
     const paramsRef = useRef<IRef>()
     const requestHeadRef = useRef<IRef>()
@@ -59,10 +58,8 @@ const Tabitem: React.FC = () => {
     const [status, setStatus] = useState<'noStart' | 'success' | 'error'>('noStart');
     const maxHeight = useRef(300);
     const [settingHeight, setSettingHeight] = useState(0)
-    // const handelOptionHeadValue=useCallback((record)=>{
-    //     console.log("改变")
-    //     setRequestHeaderValues(record)
-    // },[])
+    const [pathValue, setPathValue] = useState("")
+
     const handelOptionHeadValue = (record: any) => {
         console.log("record", record)
         setRequestHeaderValues(record)
@@ -79,8 +76,14 @@ const Tabitem: React.FC = () => {
         {
             key: '1',
             label: '请求头',
-            children: <FormTable columns={headerColumns} onChangeValue={(e) => {
-                console.log("过来了", e)
+            children: <FormTable dataSource={[
+                {
+                    name: "Authorization",
+                    value: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODU3MTkxIiwiaWF0IjoxNzI2Nzk3Mjg5LCJleHAiOjE3MjkzODkyODl9.kXCqW9HmicOQH8rbVZk2LAxUl56kdxKJAO4H6_aJ8jg",
+                    desc: "token"
+                }
+            ]} columns={headerColumns} onChangeValue={(e) => {
+
                 const tem = e.map((item: any) => ({
                     id: item.id,
                     name: item.name.value,
@@ -241,13 +244,13 @@ const Tabitem: React.FC = () => {
             isMoving.current = false;
         }
     }
+    useEffect(() => {
+        if (data) {
+            setPath(data?.path)
+        }
 
-    // useEffect(() => {
-    //     // document.addEventListener('mousemove', (e) => {
-    //     //     handleMouseMove(e)
-    //     // })
-    //     console.log(maxHeight.current, "数据")
-    // }, [settingHeight])
+    }, [data])
+
     return (
         <>
             <Spin size="large" spinning={showSpinning} fullscreen/>
@@ -265,7 +268,7 @@ const Tabitem: React.FC = () => {
                                 <div className="text-[16px] text-textPrimary">请求</div>
                             </div>
                             <div className="w-2/4 ml-3">
-                                <Input onChange={(e) => handleOptionChangeInput(e)}
+                                <Input value={path} onChange={(e) => handleOptionChangeInput(e)}
                                        addonBefore={selectBefore}
                                 />
                             </div>
@@ -384,4 +387,4 @@ const Tabitem: React.FC = () => {
 }
 
 
-export default Tabitem
+export default TabItem

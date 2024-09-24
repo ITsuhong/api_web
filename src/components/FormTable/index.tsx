@@ -31,17 +31,18 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
             }
         })
         setTableValue([tem])
+
     }, [])
     useEffect(() => {
         if (dataSource) {
-
-            setTableValue(dataSource.map((item: any) => {
-                return {
-                    ...item,
-                    id: getUUid()
-                }
-            }))
-            onChangeValue?.(dataSource)
+            console.log(dataSource,"dataSoures",columns)
+            // setTableValue(dataSource.map((item: any) => {
+            //     return {
+            //         ...item,
+            //         id: getUUid()
+            //     }
+            // }))
+            // onChangeValue?.(dataSource)
         }
     }, [dataSource])
 
@@ -49,6 +50,7 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
 
         if (tableValue) {
             const temTableValue: any = [...tableValue];
+            console.log("改变",temTableValue)
             temTableValue[index][type].value = e.target.value;
             setTableValue(temTableValue)
 
