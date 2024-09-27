@@ -1,17 +1,18 @@
-import {Button, Space, Select} from "antd";
-import {SearchOutlined} from '@ant-design/icons';
+import {Button, Space, Select, Popconfirm} from "antd";
 import Icon from "@/components/Global/Icon";
 import React, {useState, useEffect} from "react";
 import {RequestMethod, RequestMethodColor} from "@/utils/RequestMethod";
-import ReactJson from 'react-json-view';
 import CodeMirror from '@uiw/react-codemirror';
+import {EditorView} from '@codemirror/view'
 import {json} from '@codemirror/lang-json';
 import {vscodeDark} from "@uiw/codemirror-theme-vscode"
 import {detailInterface} from "@/apis/request"
 import type {IInterface} from "@/apis/request"
 
-const Documentation = ({data}: { data: any }) => {
-    // const [json, setJson] = useState<any>();
+const Documentation = ({data, handleOptionAction}: {
+    data: any,
+    handleOptionAction: (action: any, record?: any) => void
+}) => {
     const [interfaceData, setInterfaceData] = useState<IInterface>()
     const [params, setParams] = useState<any>([])
     const [headerParams, setHeaderParams] = useState([])
@@ -34,8 +35,14 @@ const Documentation = ({data}: { data: any }) => {
                 <div className="text-base font-semibold">{interfaceData?.name}</div>
                 <div>
                     <Space>
-                        <Button type="primary" icon={<Icon name="icon-kuaijiejiaoyi"/>}>运行</Button>
-                        <Button>删除</Button>
+                        <Button onClick={() => {
+                            handleOptionAction("run")
+                        }} type="primary" icon={<Icon name="icon-kuaijiejiaoyi"/>}>运行</Button>
+                        <Popconfirm placement="topLeft" title="删除这个接口" okText="Yes"
+                                    cancelText="No" onConfirm={() => handleOptionAction("delete", data?.id)}>
+                            <Button>删除</Button>
+                        </Popconfirm>
+
                     </Space>
                 </div>
             </div>
@@ -154,9 +161,12 @@ const Documentation = ({data}: { data: any }) => {
                 <div className="border-[1px] rounded-md mt-4">
                     <div className="border-b-[1px] p-2">Body参数</div>
                     <div className="p-3">
-                        <ReactJson name={false} iconStyle="square" src={JSON.parse(interfaceData?.body || '{}')}
-                                   style={{fontSize: 16, width: "100%", wordBreak: "break-all"}}
-                                   theme="shapeshifter:inverted"></ReactJson>
+                        <CodeMirror theme={vscodeDark} value={interfaceData?.body} height="200px"
+                                    extensions={[json(), EditorView.lineWrapping]}
+                                    readOnly={true}/>
+                        {/*<ReactJson name={false} iconStyle="square" src={JSON.parse(interfaceData?.body || '{}')}*/}
+                        {/*           style={{fontSize: 16, width: "100%", wordBreak: "break-all"}}*/}
+                        {/*           theme="shapeshifter:inverted"></ReactJson>*/}
 
                     </div>
                 </div>

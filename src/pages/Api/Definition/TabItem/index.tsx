@@ -33,10 +33,28 @@ const headerColumns = [
 
     }
 ]
+const paramsColumns = [
+    {
+        name: "参数名",
+        value: "name",
+    },
+    {
+        name: "参数值",
+        value: "value",
+        width: 400,
+        modal: true,
+        variable: true,
+
+    }, {
+        name: "说明",
+        value: "desc",
+        modal: true
+
+    }
+]
 const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     const [jsonData, setJsonData] = useState('')
     const paramsRef = useRef<IRef>()
-    const requestHeadRef = useRef<IRef>()
     const bodyRef = useRef<IRef>(null)
     const isMoving = useRef(false)
     const [startY, setStartY] = useState(0); // 用于记录鼠标初始Y位置
@@ -59,9 +77,9 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     const maxHeight = useRef(300);
     const [settingHeight, setSettingHeight] = useState(0)
     const [pathValue, setPathValue] = useState("")
+    const [headerDataSource, setHeaderDataSource] = useState([])
 
     const handelOptionHeadValue = (record: any) => {
-        console.log("record", record)
         setRequestHeaderValues(record)
     }
 
@@ -76,13 +94,7 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
         {
             key: '1',
             label: '请求头',
-            children: <FormTable dataSource={[
-                {
-                    name: "Authorization",
-                    value: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiODU3MTkxIiwiaWF0IjoxNzI2Nzk3Mjg5LCJleHAiOjE3MjkzODkyODl9.kXCqW9HmicOQH8rbVZk2LAxUl56kdxKJAO4H6_aJ8jg",
-                    desc: "token"
-                }
-            ]} columns={headerColumns} onChangeValue={(e) => {
+            children: <FormTable dataSource={headerDataSource} columns={headerColumns} onChangeValue={(e) => {
 
                 const tem = e.map((item: any) => ({
                     id: item.id,
@@ -99,7 +111,16 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
         {
             key: '2',
             label: 'Params参数',
-            // children: <FormTable columns={headerColumns} onChangeValue={handelOptionHeadValue}/>
+            children: <FormTable columns={paramsColumns} onChangeValue={(e: any) => {
+                const tem = e.map((item: any) => ({
+                    id: item.id,
+                    name: item.name.value,
+                    value: item.value.value,
+                    desc: item.desc.value
+                }))
+                setRequestDate({...requestDate, params: tem})
+                console.log(tem, 'tem')
+            }}/>
         },
         {
             key: '3',
@@ -130,7 +151,7 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     }
     const [responseActive, setResponseActive] = useState("1")
     const selectBefore = (
-        <Select defaultValue={methodType} className="w-24" onChange={handleMethodChange}>
+        <Select value={methodType} className="w-24" onChange={handleMethodChange}>
             {
                 RequestMethod.map(item => {
                     return (
@@ -149,18 +170,15 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     }
 
     const handleOptionSend = () => {
-        console.log(requestHeaderValues, "info")
         let url = ''
         // console.log(EnvironmentStore.selectEnvironment.serviceUrlDataList[0].url)
-
-
         setResponseActive("1")
         setShowSpinning(true)
         // setTimeout()
         try {
             const temData = requestDate
             temData.requestType = methodType
-            temData.params = paramsRef.current?.getInfo().info
+            // temData.params = paramsRef.current?.getInfo().info
 
             temData.bodyData = bodyRef.current?.getInfo()
             // temData.headers = JSON.stringify(requestHeaderValues)
@@ -181,19 +199,16 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
 
                 temData.params?.forEach((item, index) => {
                     if (item.name && item.value) {
-
                         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
                         (index === 0 && !temData.path.includes("?")) ? temData.path += `?${item.name}=${item.value}` : temData.path += `&${item.name}=${item.value}`
                     }
 
                 })
-                // temData.path=requestDate.path+"?"
             }
 
             setRequestDate(temData)
 
             getRequest(requestDate).then(res => {
-                console.log(res, "haha")
                 if (res.data) {
                     setJsonData(res.data.body)
                     setResponseData(res.data)
@@ -203,7 +218,6 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
 
                     const temHeadData: any = [];
                     for (const key in res.data.headers) {
-                        console.log(key)
                         temHeadData.push({
                             key,
                             value: res.data.headers[key]?.[0]
@@ -226,7 +240,6 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
         }
     }
     const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
-
         setStartY(e.clientY);
         lastY.current = e.clientY
         isMoving.current = true;
@@ -247,6 +260,32 @@ const TabItem: React.FC<{ data?: IInterface }> = ({data}) => {
     useEffect(() => {
         if (data) {
             setPath(data?.path)
+            setRequestDate({...requestDate, path: data?.path})
+            console.log(data?.restfulType, '00')
+            setMethodType(data?.restfulType)
+            if (data?.requestHeader) {
+                const tem = JSON.parse(data?.requestHeader)
+                const requestData = tem?.map((item: any) => {
+                    return {
+                        "desc": {
+                            name: "",
+                            type: "text",
+                            value: item.description
+                        },
+                        "name": {
+                            name: "",
+                            type: "text",
+                            value: item.name
+                        },
+                        "value": {
+                            name: "",
+                            type: "text",
+                            value: item.value
+                        },
+                    }
+                })
+                setHeaderDataSource(requestData)
+            }
         }
 
     }, [data])

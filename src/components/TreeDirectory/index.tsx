@@ -230,7 +230,7 @@ const TreeDirectoryCom = ({data, onChange, interfaceList, onClickNode}: ITreeDir
         }
 
 
-    }, [data, checkNode])
+    }, [data, checkNode,interfaceList])
     return <div className="mt-2 w-80">
         <Tree
             blockNode

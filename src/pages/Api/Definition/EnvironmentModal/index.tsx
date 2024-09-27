@@ -9,8 +9,6 @@ import {
     IEnvironment,
     IServiceUrl,
     IVariable,
-    selectAllEnvironment,
-    selectGlobalVariable,
     updateEnv,
     deleteEnv
 } from "@/apis/environment"
@@ -149,7 +147,6 @@ const EnvironmentModal = ({isModalOpen, onChange}: ModalProps) => {
         setGlobalVariables(EnvironmentStore.getGlobalVariableList)
     }
     useEffect(() => {
-
         if (selectedEnvironment === 0) {
             if (globalVariables) {
                 const gloData = globalVariables.map((item: IVariable) => {
@@ -196,8 +193,10 @@ const EnvironmentModal = ({isModalOpen, onChange}: ModalProps) => {
         if (!EnvironmentList) return
         let temData: any = EnvironmentList.find(item => item.id == selectedEnvironment)?.variableDataList
         let serviceData: any = EnvironmentList.find(item => item.id == selectedEnvironment)?.serviceUrlDataList
+
         if (temData?.length) {
             temData = temData.map((item: IVariable) => {
+                console.log(item, 11)
                 return {
                     "description": {
                         name: "",
@@ -216,6 +215,7 @@ const EnvironmentModal = ({isModalOpen, onChange}: ModalProps) => {
                     },
                 }
             })
+            console.log(temData, "temdata")
         } else {
             temData = [{
                 "description": {
@@ -275,7 +275,7 @@ const EnvironmentModal = ({isModalOpen, onChange}: ModalProps) => {
     useEffect(() => {
         if (isModalOpen) {
             setEnvData()
-            setSelectedEnvironment(EnvironmentStore.getList?.[0].id || 0)
+            setSelectedEnvironment(EnvironmentStore.getList?.[0]?.id || 0)
             // selectGlobalVariable().then(res => {
             //     setGlobalVariables(res.data)
             // })

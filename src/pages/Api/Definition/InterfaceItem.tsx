@@ -1,12 +1,13 @@
 import {Button, Input, message, Select, Tabs, Tree} from "antd";
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import {RequestMethod, RequestMethodColor} from "@/utils/RequestMethod";
 import FormTable from "@/components/FormTable";
 import Body from "@/pages/Api/Definition/TabItem/Body";
-import {createInterface} from "@/apis/request"
+import {createInterface, IInterface, updateInterface} from "@/apis/request"
 import CodeMirror from '@uiw/react-codemirror';
 import {json} from '@codemirror/lang-json';
 import {vscodeDark} from "@uiw/codemirror-theme-vscode"
+import {data} from "autoprefixer";
 // import './index.less'
 const {Option} = Select
 const {TextArea} = Input;
@@ -51,9 +52,10 @@ const paramsColumns = [
 
     }
 ]
-const InterfaceItem = ({directoryId, onReady}: {
+const InterfaceItem = ({data, directoryId, onReady}: {
+    data?: IInterface,
     directoryId?: number,
-    onReady: () => void
+    onReady: (data: any) => void
 }) => {
     const [methodType, setMethodType] = useState<number>(RequestMethod[0].value)
     const [pathName, setPathName] = useState("")
@@ -65,28 +67,52 @@ const InterfaceItem = ({directoryId, onReady}: {
     const maxHeight = useRef(300);
     const bodyRef = useRef<any>(null)
 
+    const [headerDataSource, setHeaderDataSource] = useState([])
+
     const [value, setValue] = React.useState("console.log('hello world!');");
+    useEffect(() => {
+        console.log("data", data)
+        if (data) {
+            setPathName(data.path)
+            setInterfaceName(data.name)
+            if (data.requestHeader) {
+                const requestData = JSON.parse(data.requestHeader)?.map((item: any) => {
+                    return {
+                        "desc": {
+                            name: "",
+                            type: "text",
+                            value: item.description
+                        },
+                        "name": {
+                            name: "",
+                            type: "text",
+                            value: item.name
+                        },
+                        "value": {
+                            name: "",
+                            type: "text",
+                            value: item.value
+                        },
+                    }
+                })
+                setHeaderDataSource(requestData)
+            }
+        }
+    }, [])
     const onChange = React.useCallback((val: any, viewUpdate: any) => {
         console.log('val:', val);
         setValue(val);
         setResponseValue(val);
     }, []);
     const handleMethodChange = (value: number) => {
-
         setMethodType(value)
     }
 
     const handleOptionSend = async () => {
-        console.log(pathName)
-        console.log(interfaceName)
-        console.log(explain)
-        console.log(requestHeaderValues)
-        console.log(paramsValues)
-        console.log(responseValue)
-        console.log(bodyRef.current?.getInfo())
-        console.log(methodType)
+
         const hide = message.loading({content: '操作中', key: 'loading'});
         const temData = {
+
             pid: 0,
             projectId: 1,
             userId: 1,
@@ -104,10 +130,17 @@ const InterfaceItem = ({directoryId, onReady}: {
             body: bodyRef.current?.getInfo() ? JSON.stringify(bodyRef.current?.getInfo()) : "",
             responseBody: responseValue
         }
-        await createInterface(temData)
+        if (data) {
+            await updateInterface({...temData, id: data?.id, directoryId: data?.directoryId})
+            onReady(null)
+        } else {
+            const result = await createInterface(temData)
+            onReady(result);
+        }
+
         hide();
         message.success("新建成功")
-        onReady();
+
     }
     const selectBefore = (
         <Select defaultValue={methodType} className="w-24" onChange={handleMethodChange}>
@@ -131,7 +164,7 @@ const InterfaceItem = ({directoryId, onReady}: {
         {
             key: '1',
             label: '请求头',
-            children: <FormTable columns={headerColumns} onChangeValue={(e) => {
+            children: <FormTable dataSource={headerDataSource} columns={headerColumns} onChangeValue={(e) => {
                 console.log("过来了", e)
                 const tem = e.map((item: any) => ({
                     id: item.id,
@@ -178,7 +211,7 @@ const InterfaceItem = ({directoryId, onReady}: {
                     <div className="text-[16px] text-textPrimary">请求</div>
                 </div>
                 <div className="w-full flex-1">
-                    <Input onChange={(e) => handleOptionChangeInput(e)}
+                    <Input value={pathName} onChange={(e) => handleOptionChangeInput(e)}
                            addonBefore={selectBefore}
                     />
                 </div>
@@ -187,7 +220,7 @@ const InterfaceItem = ({directoryId, onReady}: {
                 </div>
             </div>
             <div className="mt-5">
-                <Input placeholder="未命名接口" variant="filled" onChange={(e) => {
+                <Input value={interfaceName} placeholder="未命名接口" variant="filled" onChange={(e) => {
                     setInterfaceName(e.target.value)
                 }}/>
             </div>

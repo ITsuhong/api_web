@@ -55,9 +55,13 @@ export const getRequest = async (data: RequestDataType) => {
 
 
 export const createInterface = async (data: IInterface) => {
-    await postax("/request/create_interface", data)
+    const result = await postax<number>("/request/create_interface", data)
+    return result.data
 }
-
+export const updateInterface = async (data: IInterface) => {
+    const result = await postax<number>("/request/update_interface", data)
+    return result.data
+}
 export const selectInterface = async () => {
     const {data} = await getax<IInterface[]>('/request/select_interface')
     return data
@@ -65,4 +69,8 @@ export const selectInterface = async () => {
 export const detailInterface = async (data: { id: number }) => {
     const result = await getax<IInterface>("/request/detail_interface", data)
     return result.data
+}
+
+export const deleteInterface = async (data: { id: number }) => {
+    await getax("/request/delete_interface", data)
 }
