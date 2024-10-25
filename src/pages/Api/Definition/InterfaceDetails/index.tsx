@@ -4,9 +4,10 @@ import Documentation from "./Documentation"
 import RunInterface from "./RunInterface"
 import InterfaceItem from "@/pages/Api/Definition/InterfaceItem";
 
-const InterfaceDetail = ({data, handleOptionDelete}: {
+const InterfaceDetail = ({data, handleOptionDelete, handleOptionUpdate}: {
     data: any,
     handleOptionDelete: (id: number) => void
+    handleOptionUpdate: () => void
 }) => {
     const handleOptionAction = (action: any, record: any) => {
         switch (action) {
@@ -30,7 +31,7 @@ const InterfaceDetail = ({data, handleOptionDelete}: {
             key: '2',
             label: '修改文档',
             children: <InterfaceItem data={data} onReady={(data: any) => {
-
+                handleOptionUpdate?.();
             }}/>,
         },
         {

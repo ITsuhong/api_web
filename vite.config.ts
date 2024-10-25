@@ -8,6 +8,7 @@ import autoprefixer from "autoprefixer"
 export default defineConfig(({mode}) => {
     const env = loadEnv(mode, process.cwd(), '')
     return {
+        base: '/interface/',
         plugins: [react()],
         css: {
             preprocessorOptions: {

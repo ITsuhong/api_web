@@ -1,4 +1,4 @@
-import {RouteObject} from 'react-router-dom'
+import {RouteObject,Navigate} from 'react-router-dom'
 
 import App from "@/App";
 import Definition from "@/pages/Api/Definition";
@@ -11,6 +11,10 @@ const routers: RouteObject[] = [{
         {
             path: '/api',
             element: <Definition/>
+        },
+        {
+            index: true,  // 这是根路径的默认子路由
+            element: <Navigate to="/api" replace />  // 重定向到 /api
         }
     ]
 },

@@ -159,7 +159,12 @@ const Definition: React.FC = () => {
                          style={{color: RequestMethod.find((item: any) => item.value == record?.restfulType)?.color}}>{RequestMethod.find((item: any) => item.value == record?.restfulType)?.name}</div>
                     <div className="ml-1">{record?.name}</div>
                 </div>,
-                children: <InterfaceDetails handleOptionDelete={handleOptionDelete} data={record}/>,
+                children: <InterfaceDetails handleOptionUpdate={() => {
+                    console.log("更新接口")
+                    selectInterface().then(res => {
+                        setInterfaceList(res.data)
+                    })
+                }} handleOptionDelete={handleOptionDelete} data={record}/>,
                 key: newActiveKey
             });
             setItems([...newPanes]);

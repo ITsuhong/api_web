@@ -4,6 +4,7 @@ export interface ITable {
     width?: number;
     modal?: boolean;
     variable?: boolean;
+    type?: string
 }
 
 export interface IPropsType {

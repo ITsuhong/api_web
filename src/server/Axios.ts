@@ -1,4 +1,4 @@
-import {CreateAxiosOptions} from "./types.ts";
+import {CreateAxiosOptions} from "./types";
 import {AxiosInstance} from "axios"
 
 import axios from 'axios'

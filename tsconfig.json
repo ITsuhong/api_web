@@ -2,12 +2,13 @@
   "compilerOptions": {
     "target": "esnext",
     "module": "esnext",
-    "strict": true,
+    "strict": false,
     "jsx": "preserve",
     "importHelpers": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "noEmit": true,
     // "sourceMap": true,
+
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "isolatedModules": true,
@@ -16,9 +17,9 @@
     // "baseUrl": ".",
     // "outDir": ".",
     "allowJs": true,
-    "types": [
-      "element-plus/global"
-    ],
+//    "types": [
+//      "element-plus/global"
+//    ],
     "lib": [
       "esnext",
       "dom",

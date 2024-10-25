@@ -138,7 +138,7 @@ const Documentation = ({data, handleOptionAction}: {
                         <div className="p-3">
                             {
                                 headerParams?.map((item: any) => {
-                                    return (<div key={item.id}>
+                                    return (<div key={item.name}>
                                         <div className="flex">
                                             <div
                                                 className="px-1 bg-[#f6fbff] text-[#7290ff] rounded-sm">{item?.name}</div>

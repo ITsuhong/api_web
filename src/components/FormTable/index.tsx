@@ -26,10 +26,11 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
         columns.forEach(item => {
             tem[item.value] = {
                 name: "",
-                type: "text",
+                type: item?.type ? item.type : 'text',
                 value: ""
             }
         })
+        console.log(tem, "tem")
         setTableValue([tem])
 
     }, [])
@@ -42,6 +43,7 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
                     id: getUUid()
                 }
             }))
+            console.log(dataSource, "dataSources")
             onChangeValue?.(dataSource)
         }
     }, [dataSource])
@@ -50,7 +52,7 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
 
         if (tableValue) {
             const temTableValue: any = [...tableValue];
-            console.log("改变", temTableValue)
+
             temTableValue[index][type].value = e.target.value;
             setTableValue(temTableValue)
 
@@ -58,11 +60,10 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
                 onChangeValue(temTableValue);
             }
         }
-
-
     };
     const handleOptionAdd = () => {
         const tem: any = {id: getUUid()};
+
         columns.forEach(item => {
             tem[item.value] = {
                 name: "",
@@ -94,10 +95,8 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
         if (temTableValue) {
             temTableValue[indexValue][typeValue]["value"] = textAreaValue;
         }
-
         setTableValue([...temTableValue])
         setTextAreaValue("")
-
     }
 
     const handleOptionOpen = (index: number, type: string) => {
@@ -109,23 +108,18 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
         setIsModalOpen(true);
     }
     const handleOptionPopoverValue = (record: any) => {
-
         const tem: any = tableValue
         tem[record.index][record.model].value = record.value
         tem[record.index][record.model].type = "variable"
         tem[record.index][record.model].name = record.name
-
         setTableValue([...tem])
         onChangeValue?.([...tem])
-
     }
     const handleOptionTagClose = (record: any, index: number) => {
-        console.log("改变", record, index)
         const tem: any = tableValue
         tem[index][record.value].value = ''
         tem[index][record.value].type = "text"
         tem[index][record.value].name = ''
-        console.log(tem)
         setTableValue([...tem])
     }
 
@@ -135,6 +129,7 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
             <div className="border-[1px]  mb-2 rounded-md border-b-0 w-full">
                 <div className="flex items-center border-b-[1px]">
                     {
+
                         columns.map((item, index) => {
                             return <div key={item.name} className={classnames({
                                 'py-2 border-r-[1px] pl-3': true,
@@ -148,11 +143,13 @@ const FormTable = ({columns, onChangeValue, dataSource}: IPropsType) => {
                 </div>
                 {
                     tableValue && tableValue?.map((item, valueIndex) => {
-
+                        console.log(tableValue, '222');
                         return (
+
                             <div className="flex items-center border-b-[1px]" key={item.id}>
                                 {
                                     columns.map((item, index) => {
+                                        console.log(tableValue, 'columnIndex', index)
                                         return <div className={classnames({
                                             "p-2 border-r-[1px]": true,
                                             "flex-1 border-r-0 flex items-center": index == columns.length - 1,

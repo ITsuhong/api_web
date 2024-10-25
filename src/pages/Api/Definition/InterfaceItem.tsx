@@ -25,6 +25,24 @@ const headerColumns = [
         modal: true,
         variable: true,
 
+    },
+    {
+        name: "是否必需",
+        value: "require",
+        type: "switch",
+        option: () => {
+            return [
+                {
+                    value: 1,
+                    text: "必需"
+                },
+                {
+                    value: 2,
+                    text: "不必需"
+                }
+            ]
+        }
+
     }, {
         name: "说明",
         value: "desc",
@@ -71,10 +89,11 @@ const InterfaceItem = ({data, directoryId, onReady}: {
 
     const [value, setValue] = React.useState("console.log('hello world!');");
     useEffect(() => {
-        console.log("data", data)
+
         if (data) {
             setPathName(data.path)
             setInterfaceName(data.name)
+            setMethodType(data.restfulType)
             if (data.requestHeader) {
                 const requestData = JSON.parse(data.requestHeader)?.map((item: any) => {
                     return {
@@ -87,6 +106,11 @@ const InterfaceItem = ({data, directoryId, onReady}: {
                             name: "",
                             type: "text",
                             value: item.name
+                        },
+                        "require": {
+                            name: "",
+                            type: "switch",
+                            value: item.value
                         },
                         "value": {
                             name: "",
@@ -107,7 +131,6 @@ const InterfaceItem = ({data, directoryId, onReady}: {
     const handleMethodChange = (value: number) => {
         setMethodType(value)
     }
-
     const handleOptionSend = async () => {
 
         const hide = message.loading({content: '操作中', key: 'loading'});
@@ -132,6 +155,7 @@ const InterfaceItem = ({data, directoryId, onReady}: {
         }
         if (data) {
             await updateInterface({...temData, id: data?.id, directoryId: data?.directoryId})
+            console.log("这是更新")
             onReady(null)
         } else {
             const result = await createInterface(temData)
@@ -143,7 +167,7 @@ const InterfaceItem = ({data, directoryId, onReady}: {
 
     }
     const selectBefore = (
-        <Select defaultValue={methodType} className="w-24" onChange={handleMethodChange}>
+        <Select value={methodType} className="w-24" onChange={handleMethodChange}>
             {
                 RequestMethod.map(item => {
                     return (
